@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { FsLogo } from "@/components/fs-logo";
 
 type HeroSectionProps = {
   darkMode: boolean;
@@ -97,7 +98,12 @@ export function HeroSection({
       className="section-fade relative flex min-h-screen flex-col overflow-hidden bg-canvas px-5 pb-8 pt-5 text-ink md:px-9 md:pb-10 md:pt-6"
     >
       <header className="flex items-center justify-between gap-4 text-[11px] uppercase tracking-[0.15em] md:text-[13px]">
-        <div>Femur</div>
+        <div className="flex items-center gap-3 self-start">
+          <FsLogo />
+          <span className="mt-[2px] hidden text-[11px] uppercase tracking-[0.24em] md:inline">
+            Femur
+          </span>
+        </div>
         <button
           type="button"
           onClick={onToggleDarkMode}
@@ -108,7 +114,9 @@ export function HeroSection({
         <div className="flex items-center gap-3 md:gap-4">
           <span className="hidden md:inline">Menu</span>
           <a
-            href="#contact"
+            href="https://cal.com/femurstudio/30min"
+            target="_blank"
+            rel="noreferrer"
             className="rounded-full bg-ink px-4 py-2 text-[10px] text-canvas transition-transform duration-300 hover:scale-[1.03] md:px-6 md:py-2.5 md:text-[11px]"
           >
             LET&apos;S TALK &rarr;

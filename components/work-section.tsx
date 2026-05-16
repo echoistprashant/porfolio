@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { projectCategories } from "@/data/project-catalog";
+import { CategoryCover } from "@/components/category-cover";
 
 const DESKTOP_ITEMS = [
   {
@@ -141,138 +142,6 @@ export function WorkSection() {
 
   return (
     <>
-      <style>{`
-        .work-section-desktop {
-          position: relative;
-          width: 100%;
-          height: 100vh;
-          overflow: hidden;
-          background: #ffffff;
-        }
-
-        .work-section-desktop .work-top-label {
-          position: absolute;
-          top: 28px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-family: sans-serif;
-          font-size: 10px;
-          font-weight: 400;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: #bbb;
-        }
-
-        .work-section-desktop .corner-label {
-          position: absolute;
-          z-index: 2;
-          max-width: 220px;
-        }
-
-        .work-section-desktop .corner-label h2 {
-          margin: 0;
-          font-family: "Helvetica Neue", Helvetica, sans-serif;
-          font-size: 36px;
-          font-weight: 300;
-          letter-spacing: -0.03em;
-          line-height: 1;
-          color: #111;
-        }
-
-        .work-section-desktop .corner-label span {
-          display: block;
-          margin-top: 8px;
-          max-width: 220px;
-          font-family: sans-serif;
-          font-size: 9px;
-          font-weight: 400;
-          letter-spacing: 0.13em;
-          line-height: 1.7;
-          text-transform: uppercase;
-          color: #aaa;
-        }
-
-        .work-section-desktop .corner-top-left {
-          top: 36px;
-          left: 44px;
-        }
-
-        .work-section-desktop .corner-top-right {
-          top: 36px;
-          right: 44px;
-          text-align: right;
-        }
-
-        .work-section-desktop .corner-bottom-left {
-          bottom: 36px;
-          left: 44px;
-        }
-
-        .work-section-desktop .corner-bottom-right {
-          right: 44px;
-          bottom: 36px;
-          text-align: right;
-        }
-
-        .work-section-desktop .work-grid {
-          --x-split: 35%;
-          --y-split: 35%;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          z-index: 1;
-          width: 480px;
-          height: 440px;
-          display: grid;
-          grid-template-columns: var(--x-split) 1fr;
-          grid-template-rows: var(--y-split) 1fr;
-          gap: 2px;
-          background: #fff;
-          transform: translate(-50%, -50%);
-          transition:
-            grid-template-columns 0.08s ease-out,
-            grid-template-rows 0.08s ease-out;
-        }
-
-        .work-section-desktop .work-grid.idle {
-          transition:
-            grid-template-columns 0.85s cubic-bezier(0.34, 1.36, 0.64, 1),
-            grid-template-rows 0.85s cubic-bezier(0.34, 1.36, 0.64, 1);
-        }
-
-        .work-section-desktop .grid-cell {
-          position: relative;
-          overflow: hidden;
-        }
-
-        .work-section-desktop .grid-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-          transform: scale(1.1);
-          transition:
-            filter 0.25s ease,
-            transform 0.25s ease;
-          filter: ${RESET_FILTER};
-        }
-
-        .work-section-desktop #work-cursor {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: 1.5px solid #222;
-          pointer-events: none;
-          z-index: 9999;
-          transform: translate(-50%, -50%);
-          transition: opacity 0.3s ease;
-          opacity: 0;
-        }
-      `}</style>
-
       <section className="section-fade bg-white text-[#0A0A0A]">
         <div className="flex w-full flex-col gap-0 md:hidden">
           {projectCategories.map((category, index) => (
@@ -282,13 +151,7 @@ export function WorkSection() {
               className="group block"
             >
               <div className="relative aspect-[16/9] w-full overflow-hidden">
-                <Image
-                  src={`https://picsum.photos/800/450?random=${index + 1}`}
-                  alt={category.label}
-                  fill
-                  sizes="100vw"
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                />
+                <CategoryCover category={category} />
               </div>
               <div className="flex items-start justify-between border-b border-[#E8E8E8] px-5 py-5">
                 <div>

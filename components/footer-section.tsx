@@ -69,7 +69,9 @@ export function FooterSection() {
           </div>
         </div>
         <a
-          href="mailto:hello@femur.studio"
+          href="https://cal.com/femurstudio/30min"
+          target="_blank"
+          rel="noreferrer"
           className="mt-10 rounded-full bg-accent px-8 py-4 text-[15px] font-bold uppercase tracking-[0.06em] text-[#0A0A0A] transition-all duration-300 hover:scale-[1.03] hover:bg-white md:px-10"
         >
           START A PROJECT &rarr;
