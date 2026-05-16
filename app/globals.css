@@ -87,6 +87,11 @@ body {
   body {
     cursor: none;
   }
+
+  .footer-section,
+  .footer-section * {
+    cursor: auto;
+  }
 }
 
 body::-webkit-scrollbar {

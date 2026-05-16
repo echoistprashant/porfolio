@@ -56,7 +56,7 @@ export function FooterSection() {
     <footer
       ref={sectionRef}
       id="contact"
-      className="section-fade flex min-h-screen flex-col justify-between bg-[#0A0A0A] px-5 py-10 text-white md:px-9 md:py-12"
+      className="footer-section section-fade flex min-h-screen flex-col justify-between bg-[#0A0A0A] px-5 py-10 text-white md:px-9 md:py-12"
     >
       <div
         ref={contentRef}
