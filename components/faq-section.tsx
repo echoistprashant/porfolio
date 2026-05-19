@@ -2,32 +2,40 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const faqItems = [
   {
-    question: "What kind of projects fit Femur best?",
+    question: "Who Is Femur Actually For?",
     answer:
-      "Brand-driven websites, product interfaces, internal systems, and automation-led builds where design quality and execution quality both matter."
+      "Founders and teams who know that the problem is bigger than a prettier homepage. If you need the brand, the site, the backend logic, or the internal flow to finally act like one system, you are a fit."
   },
   {
-    question: "Do you only handle design or full development too?",
+    question: "What If We Only Need A Website?",
     answer:
-      "The portfolio positioning suggests full-stack delivery: concept, interface direction, front-end implementation, and production-ready handoff or launch."
+      "If a website is genuinely the whole fix, we will build the website. If the real issue is your sales flow, client ops, or handoff chaos, we will say that too. We do not sell extra work for sport, but we do not fake simple answers either."
   },
   {
-    question: "Can we start small before committing to a larger build?",
+    question: "Do You Design And Develop In-House?",
     answer:
-      "Yes. Discovery, landing pages, UI directions, or scoped product modules work well as smaller starting engagements before a broader rollout."
+      "Yes. Femur is not a design file factory. We handle the direction, the interface, the build, the logic behind it, and the cleanup required to get it live without excuses."
   },
   {
-    question: "How involved does the client need to be?",
+    question: "Can We Start Small First?",
     answer:
-      "Enough to keep decisions sharp, but not enough to slow momentum. The ideal setup is fast approvals, clear priorities, and structured check-ins."
+      "Yes, if the smaller scope still solves something real. A focused landing page, one product surface, or one broken internal flow can be a smart starting point. We just will not package busywork as momentum."
   },
   {
-    question: "What happens after launch?",
+    question: "How Involved Do We Need To Be?",
     answer:
-      "Post-launch support can cover refinements, fixes, performance tuning, and follow-up improvements once the first version is live."
+      "Available, decisive, and honest. You do not need to sit in Figma all day, but you do need to answer the hard questions quickly. Slow approvals and vague feedback kill good work faster than bad code does."
+  },
+  {
+    question: "What Happens After Launch?",
+    answer:
+      "We do not vanish the second something ships. We stay close enough to QA the real-world use, fix rough edges, and make sure the thing works the way it was supposed to before we call it done."
   }
 ];
 
@@ -46,59 +54,69 @@ export function FaqSection() {
       return;
     }
 
-    gsap.set(header, { opacity: 0, y: 24 });
-    gsap.set(items, { opacity: 0, y: 24 });
+    const ctx = gsap.context(() => {
+      gsap.set(header, { opacity: 0, y: 24 });
+      gsap.set(items, { opacity: 0, y: 32 });
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
+      gsap.to(header, {
+        opacity: 1,
+        y: 0,
+        duration: 0.75,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 75%",
+          once: true
+        }
+      });
 
-          gsap.to(header, {
-            opacity: 1,
-            y: 0,
-            duration: 0.75,
-            ease: "power3.out"
-          });
+      gsap.to(items, {
+        opacity: 1,
+        y: 0,
+        duration: 0.75,
+        stagger: 0.08,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 70%",
+          once: true
+        }
+      });
+    }, section);
 
-          gsap.to(items, {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            stagger: 0.08,
-            delay: 0.08,
-            ease: "power3.out"
-          });
-
-          observer.disconnect();
-        });
-      },
-      { threshold: 0.18 }
-    );
-
-    observer.observe(section);
-
-    return () => observer.disconnect();
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="section-fade bg-white px-5 py-20 text-[#0A0A0A] md:px-9 md:py-28"
+      className="section-fade bg-[#F3F0EA] px-5 py-[7.5rem] text-[#0A0A0A] md:px-9 md:py-[7.5rem]"
+      style={{ fontFamily: "var(--font-fallback), sans-serif" }}
     >
-      <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-10">
-        <div ref={headerRef} className="max-w-3xl">
-          <p className="mb-3 text-[11px] uppercase tracking-[0.28em] text-[#7A7A7A]">
-            FAQ
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-12">
+        <div
+          ref={headerRef}
+          className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,400px)] lg:items-center lg:gap-16"
+        >
+          <div className="max-w-[920px]">
+            <p className="mb-5 text-[11px] font-normal uppercase tracking-[0.32em] text-black/40">
+              FAQ
+            </p>
+            <h2 className="max-w-[10ch] text-[clamp(3.25rem,7vw,5rem)] font-extrabold uppercase leading-[0.95] tracking-[-0.06em]">
+              Before You
+              <br />
+              Get On
+              <br />
+              The Call
+            </h2>
+          </div>
+          <p className="max-w-[400px] text-[16px] font-normal leading-[1.6] text-black/65 lg:justify-self-end">
+            These are the questions people ask before they decide whether Femur is the right team
+            or the wrong one. Better to be clear now than polite for three calls.
           </p>
-          <h2 className="text-[clamp(3rem,7vw,5.5rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.04em]">
-            Questions Before The First Call
-          </h2>
         </div>
 
-        <div className="flex flex-col border-t border-[#E4E4E4]">
+        <div className="flex flex-col border-t border-black/10">
           {faqItems.map((item, index) => {
             const isOpen = openIndex === index;
 
@@ -108,7 +126,7 @@ export function FaqSection() {
                 ref={(element) => {
                   itemRefs.current[index] = element;
                 }}
-                className="border-b border-[#E4E4E4]"
+                className="border-b border-black/10"
               >
                 <button
                   type="button"
@@ -116,10 +134,10 @@ export function FaqSection() {
                   onClick={() => setOpenIndex(isOpen ? -1 : index)}
                   className="flex w-full items-start justify-between gap-6 py-6 text-left md:py-7"
                 >
-                  <span className="max-w-[20ch] text-[1.25rem] font-medium uppercase leading-[1.05] tracking-[-0.02em] md:text-[1.65rem]">
+                  <span className="max-w-[20ch] text-[1.35rem] font-semibold uppercase leading-[1.02] tracking-[-0.03em] md:text-[1.85rem]">
                     {item.question}
                   </span>
-                  <span className="pt-1 text-[11px] uppercase tracking-[0.22em] text-[#8A8A8A]">
+                  <span className="pt-1 text-[11px] font-normal uppercase tracking-[0.24em] text-black/40">
                     {isOpen ? "Close" : "Open"}
                   </span>
                 </button>
@@ -129,7 +147,7 @@ export function FaqSection() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="max-w-3xl pb-6 text-[14px] leading-7 text-[#555555] md:pb-7 md:text-[15px]">
+                    <p className="max-w-[780px] pb-6 text-[14px] font-normal leading-[1.75] text-black/65 md:pb-7 md:text-[15px]">
                       {item.answer}
                     </p>
                   </div>

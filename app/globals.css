@@ -89,7 +89,9 @@ body {
   }
 
   .footer-section,
-  .footer-section * {
+  .footer-section *,
+  .work-category-page,
+  .work-category-page * {
     cursor: auto;
   }
 }
@@ -296,12 +298,29 @@ button {
   top: 0;
   left: 0;
   z-index: 9999;
-  width: 32px;
-  height: 32px;
-  border: 1.5px solid #222;
-  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border: 1px solid rgba(17, 17, 17, 0.22);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #111;
   opacity: 0;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.work-section-desktop #work-cursor span {
+  font-family: var(--font-fallback), sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }

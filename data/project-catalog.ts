@@ -26,34 +26,43 @@ export const projectCategories: ProjectCategory[] = [
   {
     slug: "web-apps",
     label: "Web Apps",
-    blurb: "Sites, platforms, e-commerce builds, and digital experiences listed across Femur's public work.",
+    blurb: "Brand-led websites and web platforms including Sikhsha.in and other business-facing product surfaces.",
     accent: "from-[#f6f1ea] via-[#efe5d8] to-[#ded0bf]",
     position: "left-0 top-0"
   },
   {
     slug: "mobile-apps",
     label: "Mobile Apps",
-    blurb: "Native and cross-platform product work gathered from Femur's portfolio and case study listings.",
+    blurb: "Mobile products like Mindspring and Sikhsha's AI-assisted school experience built for everyday use, not demos.",
     accent: "from-[#e8f1ff] via-[#d9e7ff] to-[#bfd3ff]",
     position: "right-0 top-0 text-right"
   },
   {
     slug: "crm-systems",
     label: "CRM Systems",
-    blurb: "Sales, platform, and internal operations systems surfaced from Femur's public case studies and testimonials.",
+    blurb: "Operational systems for school management, client workflows, and internal business tracking including Sikhsha and Accelify.",
     accent: "from-[#edf7eb] via-[#dff0db] to-[#c7e0c1]",
     position: "bottom-0 left-0"
   },
   {
     slug: "automation",
     label: "Automation",
-    blurb: "Automation, QA, AI operations, and workflow system projects listed on Femur's automation portfolio.",
+    blurb: "Automation systems for HR, payroll, outbound email, and internal ops where repeat work needed to disappear.",
     accent: "from-[#fff2d8] via-[#ffe7b8] to-[#ffd58a]",
     position: "bottom-0 right-0 text-right"
   }
 ];
 
 export const projects: ProjectEntry[] = [
+  {
+    name: "Sikhsha.in",
+    domain: "School ERP Website",
+    summary:
+      "Marketing and product website for Sikhsha, positioning the platform around school ERP operations, AI teaching tools, and student learning support.",
+    sourceLabel: "sikhsha.in",
+    sourceUrl: "https://sikhsha.in/",
+    categories: ["web-apps"]
+  },
   {
     name: "The Oak Bistro",
     domain: "Hospitality",
@@ -121,6 +130,15 @@ export const projects: ProjectEntry[] = [
     categories: ["web-apps"]
   },
   {
+    name: "Mindspring",
+    domain: "Education Mobile App",
+    summary:
+      "Student companion app for accessing books, notes, results, and study materials with teacher-uploaded resources in one mobile experience.",
+    sourceLabel: "Google Play",
+    sourceUrl: "https://play.google.com/store/apps/details?id=com.sumit.mindspring",
+    categories: ["mobile-apps"]
+  },
+  {
     name: "FitnessPal Workout App",
     domain: "Mobile Apps",
     summary: "Fitness app with workout plans, progress tracking, and social features.",
@@ -138,35 +156,75 @@ export const projects: ProjectEntry[] = [
     categories: ["mobile-apps"]
   },
   {
-    name: "Incubator Online",
-    domain: "Platform Development",
-    summary: "Scalable platform for startups referenced in Femur's public testimonial section.",
-    sourceLabel: "web.femur.studio",
-    sourceUrl: "https://web.femur.studio/",
+    name: "Sikhsha AI Teaching Assistant",
+    domain: "AI Learning App",
+    summary:
+      "AI-based teaching assistant experience for lesson planning, deck generation, classroom activities, and student doubt support inside the Sikhsha school workflow.",
+    sourceLabel: "sikhsha.in",
+    sourceUrl: "https://sikhsha.in/",
+    categories: ["mobile-apps"]
+  },
+  {
+    name: "Sikhsha School ERP",
+    domain: "School CRM / ERP",
+    summary:
+      "Role-based ERP for owners, principals, admins, teachers, students, and parents with admissions, fees, attendance, communication, analytics, and AI classroom tools.",
+    sourceLabel: "sikhsha.in",
+    sourceUrl: "https://sikhsha.in/",
     categories: ["crm-systems"]
   },
   {
-    name: "Vendavo Sales AI",
-    domain: "Sales Automation",
-    summary: "Lead response acceleration system with predictive AI scoring.",
-    sourceLabel: "automation.femur.studio",
-    sourceUrl: "https://automation.femur.studio/",
-    categories: ["crm-systems", "automation"]
+    name: "Accelify",
+    domain: "Client Operations CRM",
+    summary:
+      "Custom CRM and workflow system for managing business operations and client movement across the pipeline. Currently closed.",
+    sourceLabel: "Private client work",
+    sourceUrl: "https://femur.studio/",
+    categories: ["crm-systems"]
   },
   {
-    name: "Grammarly Ops Scale",
-    domain: "AI Operations",
-    summary: "Support operations scaled with neural-network-based text analysis.",
-    sourceLabel: "automation.femur.studio",
-    sourceUrl: "https://automation.femur.studio/",
-    categories: ["crm-systems", "automation"]
+    name: "Incubator Online",
+    domain: "Platform Development",
+    summary:
+      "Operational platform for startup-facing workflows, used here as the third CRM and systems example in Femur's work index.",
+    sourceLabel: "Femur project index",
+    sourceUrl: "https://femur.studio/",
+    categories: ["crm-systems"]
   },
   {
-    name: "Airbnb QA Automation",
-    domain: "Software QA",
-    summary: "Intelligent test suite work reducing global testing time by 50%.",
-    sourceLabel: "automation.femur.studio",
-    sourceUrl: "https://automation.femur.studio/",
+    name: "HR Management System",
+    domain: "HR Automation",
+    summary:
+      "Internal HR system for employee records, attendance, approvals, and repetitive people-ops tasks that should not depend on spreadsheets.",
+    sourceLabel: "Private automation work",
+    sourceUrl: "https://femur.studio/",
+    categories: ["automation"]
+  },
+  {
+    name: "Payroll Automation",
+    domain: "Finance Operations",
+    summary:
+      "Payroll workflow automation for recurring salary calculations, payout tracking, and admin-side reporting across routine finance operations.",
+    sourceLabel: "Private automation work",
+    sourceUrl: "https://femur.studio/",
+    categories: ["automation"]
+  },
+  {
+    name: "Prane Outreach Engine",
+    domain: "Email Outreach",
+    summary:
+      "Outbound email outreach workflow for Prane, covering prospect movement, follow-ups, and repeatable campaign handling without manual chasing.",
+    sourceLabel: "prane.in",
+    sourceUrl: "https://prane.in/",
+    categories: ["automation"]
+  },
+  {
+    name: "Ops Handoff Automation",
+    domain: "Internal Workflow Systems",
+    summary:
+      "Internal handoff and status automation to move work cleanly between teams without repeated manual updates or task duplication.",
+    sourceLabel: "Private automation work",
+    sourceUrl: "https://femur.studio/",
     categories: ["automation"]
   },
   {

@@ -2,31 +2,34 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const processSteps = [
   {
     number: "01",
-    title: "Discover",
+    title: "Call Out The Real Problem",
     description:
-      "Clarify goals, audience, offer, and the exact friction points the site or product needs to solve."
+      "We do not start by decorating a vague idea. First we figure out what is actually broken: the offer, the flow, the handoff, or the way your business is being perceived."
   },
   {
     number: "02",
-    title: "Shape",
+    title: "Decide What Needs Building",
     description:
-      "Translate that strategy into direction: structure, visual language, messaging hierarchy, and interaction choices."
+      "Sometimes you need a site. Sometimes you need a CRM, automation, or a better internal system. We scope the thing that fixes the bottleneck, not the thing that sounds trendy on a call."
   },
   {
     number: "03",
-    title: "Build",
+    title: "Build The Whole Machine",
     description:
-      "Design and development move together so the final output stays fast, precise, and consistent."
+      "Design and development happen together. The front end, the backend logic, the admin flow, and the edge cases get built like one system instead of four freelancers passing files around."
   },
   {
     number: "04",
-    title: "Refine",
+    title: "Stay Until It Works",
     description:
-      "QA, feedback, launch support, and post-handoff polish so the work lands cleanly in the real world."
+      "We QA, tighten, test, and ship. If it still needs babysitting after launch, it is not done. The job is finished when it runs cleanly and your team knows how to use it."
   }
 ];
 
@@ -44,81 +47,83 @@ export function ProcessSection() {
       return;
     }
 
-    gsap.set(title, { opacity: 0, x: 40 });
-    gsap.set(steps, { opacity: 0, y: 36 });
+    const ctx = gsap.context(() => {
+      gsap.set(title, { opacity: 0, y: 24 });
+      gsap.set(steps, { opacity: 0, y: 40 });
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
+      gsap.to(title, {
+        opacity: 1,
+        y: 0,
+        duration: 0.75,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 75%",
+          once: true
+        }
+      });
 
-          gsap.to(title, {
-            opacity: 1,
-            x: 0,
-            duration: 0.8,
-            ease: "power3.out"
-          });
+      gsap.to(steps, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 70%",
+          once: true
+        }
+      });
+    }, section);
 
-          gsap.to(steps, {
-            opacity: 1,
-            y: 0,
-            duration: 0.75,
-            stagger: 0.1,
-            delay: 0.1,
-            ease: "power3.out"
-          });
-
-          observer.disconnect();
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(section);
-
-    return () => observer.disconnect();
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="section-fade noise relative overflow-hidden bg-[#0A0A0A] px-5 py-20 text-white md:px-9 md:py-28"
+      className="section-fade relative overflow-hidden border-t border-white/10 bg-[#0A0A0A] px-5 py-[7.5rem] text-[#F3F0EA] md:px-9 md:py-[7.5rem]"
+      style={{ fontFamily: "var(--font-fallback), sans-serif" }}
     >
-      <div className="relative z-10 mx-auto flex w-full max-w-[1320px] flex-col gap-14 md:gap-16">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col gap-14 lg:gap-16">
         <div
           ref={titleRef}
-          className="grid gap-8 md:grid-cols-[0.85fr_1.15fr] md:items-end"
+          className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-center lg:gap-16"
         >
-          <div className="text-[clamp(3rem,7vw,6rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.04em]">
-            Process
+          <div className="max-w-[920px]">
+            <p className="mb-5 text-[11px] font-normal uppercase tracking-[0.32em] text-white/40">
+              How Femur Works
+            </p>
+            <h2 className="max-w-[10ch] text-[clamp(3.25rem,7vw,5rem)] font-extrabold uppercase leading-[0.95] tracking-[-0.06em] text-white">
+              We Do Not
+              <br />
+              Wing It
+            </h2>
           </div>
-          <p className="max-w-2xl text-[15px] leading-7 text-white/68 md:justify-self-end md:text-[17px]">
-            A stronger portfolio also needs operational clarity. This section shows that Femur has
-            a repeatable way of working, not just a moodboard and a contact button.
+          <p className="max-w-[400px] text-[16px] font-normal leading-[1.6] text-white/65 lg:justify-self-end">
+            You are not hiring Femur for vague creative energy. You are hiring a founder-led team
+            that can diagnose the mess, build the right system, and stay in the room until the
+            thing actually works.
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {processSteps.map((step, index) => (
             <div
               key={step.number}
               ref={(element) => {
                 stepRefs.current[index] = element;
               }}
-              className="rounded-[28px] border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm"
+              className="flex min-h-[320px] flex-col rounded-[4px] border border-white/[0.07] bg-[#111111] p-8 transition duration-300 ease-in-out hover:-translate-y-1 hover:border-white/20"
             >
-              <div className="mb-10 flex items-center justify-between gap-4">
-                <span className="text-[11px] uppercase tracking-[0.24em] text-white/40">
-                  {step.number}
-                </span>
-                <span className="h-px flex-1 bg-white/10" />
-              </div>
-              <h3 className="text-[1.8rem] font-bold uppercase leading-none tracking-[-0.03em]">
+              <span className="text-[11px] font-normal uppercase tracking-[0.32em] text-white/30">
+                {step.number}
+              </span>
+              <h3 className="mt-10 max-w-[14ch] text-[20px] font-semibold uppercase leading-[1] tracking-[-0.03em] text-white">
                 {step.title}
               </h3>
-              <p className="mt-5 text-[14px] leading-7 text-white/65">
+              <p className="mt-5 max-w-[32ch] text-[14px] font-normal leading-[1.7] text-white/55">
                 {step.description}
               </p>
             </div>

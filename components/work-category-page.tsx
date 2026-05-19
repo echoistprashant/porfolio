@@ -41,7 +41,7 @@ export function WorkCategoryPage({
   }, [category.slug]);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#d8cec0] text-[#171411]">
+    <main className="work-category-page min-h-screen overflow-hidden bg-[#d8cec0] text-[#171411]">
       <div className="relative">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.45),_transparent_55%),linear-gradient(180deg,_rgba(255,255,255,0.18),_transparent)]" />
 

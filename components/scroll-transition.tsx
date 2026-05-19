@@ -31,13 +31,11 @@ export function ScrollTransition({ visionSection, workSection }: ScrollTransitio
 
     if (!container || !work) return;
 
-    // Only activate the scroll-jacking effect on desktop
     if (!isDesktop) {
       gsap.set(work, { y: "0%" });
       return;
     }
 
-    // Work section starts fully off-screen below
     gsap.set(work, { y: "100%" });
 
     const trigger = ScrollTrigger.create({
@@ -56,7 +54,6 @@ export function ScrollTransition({ visionSection, workSection }: ScrollTransitio
     };
   }, [isDesktop]);
 
-  // ── Mobile: plain stacked layout, no scroll trickery ───────────────
   if (!isDesktop) {
     return (
       <>
@@ -66,7 +63,6 @@ export function ScrollTransition({ visionSection, workSection }: ScrollTransitio
     );
   }
 
-  // ── Desktop: sticky Vision + sliding Work ──────────────────────────
   return (
     <div ref={containerRef} className="relative" style={{ height: "200vh" }}>
       <div className="sticky top-0 h-screen overflow-hidden">
