@@ -2,27 +2,30 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const capabilities = [
   {
     title: "Brand-Led Websites",
     description:
-      "Distinct marketing sites and premium portfolios shaped around perception, clarity, and conversion."
+      "Marketing sites and portfolios built around how you want to be perceived - not templates, not themes."
   },
   {
-    title: "Product Systems",
+    title: "Mobile Apps & CRMs",
     description:
-      "Dashboards, internal tools, and custom platforms built to make complex operations easier to run."
+      "Custom-built apps and client management systems that actually match how your business operates."
   },
   {
-    title: "Automation Layers",
+    title: "Automation Systems",
     description:
-      "Workflow systems that reduce manual overhead across outreach, support, QA, and internal handoffs."
+      "Outreach flows, lead pipelines, and internal handoffs - so your team stops doing the same thing twice."
   },
   {
-    title: "Launch Support",
+    title: "End-to-End Delivery",
     description:
-      "Polish, QA, iteration, and structured follow-through so the final release feels considered, not rushed."
+      "From first call to final deploy. We QA, iterate, and stay until it ships the way it should."
   }
 ];
 
@@ -40,85 +43,86 @@ export function CapabilitiesSection() {
       return;
     }
 
-    gsap.set(intro, { opacity: 0, y: 30 });
-    gsap.set(cards, { opacity: 0, y: 40 });
+    const ctx = gsap.context(() => {
+      gsap.set(intro, { opacity: 0, y: 24 });
+      gsap.set(cards, { opacity: 0, y: 40 });
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) {
-            return;
-          }
+      gsap.to(intro, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 75%",
+          once: true
+        }
+      });
 
-          gsap.to(intro, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out"
-          });
+      gsap.to(cards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 70%",
+          once: true
+        }
+      });
+    }, section);
 
-          gsap.to(cards, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.1,
-            delay: 0.12,
-            ease: "power3.out"
-          });
-
-          observer.disconnect();
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(section);
-
-    return () => observer.disconnect();
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="section-fade bg-[#F5F0EB] px-5 py-20 text-[#0A0A0A] md:px-9 md:py-28"
+      className="section-fade bg-[#0A0A0A] px-5 py-[7.5rem] text-[#F3F0EA] md:px-9 md:py-[7.5rem]"
+      style={{ fontFamily: "var(--font-fallback), sans-serif" }}
     >
-      <div className="mx-auto flex w-full max-w-[1320px] flex-col gap-14 md:gap-16">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-14 lg:gap-16">
         <div
           ref={introRef}
-          className="grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end"
+          className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,400px)] lg:items-center lg:gap-16"
         >
-          <div>
-            <p className="mb-3 text-[11px] uppercase tracking-[0.28em] text-[#777777]">
-              What We Add
+          <div className="max-w-[920px]">
+            <p className="mb-5 text-[11px] font-normal uppercase tracking-[0.32em] text-white/40">
+              What We Build
             </p>
-            <h2 className="max-w-[10ch] text-[clamp(3rem,7vw,6rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.04em]">
-              More Than A Pretty Front Page
+            <h2 className="max-w-[9ch] text-[clamp(3.25rem,7vw,5rem)] font-extrabold uppercase leading-[0.95] tracking-[-0.06em] text-white">
+              More Than
+              <br />
+              A Pretty
+              <br />
+              Front Page
             </h2>
           </div>
-          <p className="max-w-2xl text-[15px] leading-7 text-[#4C4C4C] md:justify-self-end md:text-[17px]">
-            The current site shows attitude, but it does not yet explain the range of work.
-            This section fills that gap by making Femur feel broader, more structured, and more
-            trustworthy without diluting the visual tone.
+          <p className="max-w-[400px] text-[16px] font-normal leading-[1.6] text-white/65 lg:justify-self-end">
+            Most agencies hand you a design and disappear. Femur builds the full picture - the
+            website, the system behind it, and the logic that makes it run without you babysitting
+            it.
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {capabilities.map((item, index) => (
             <article
               key={item.title}
               ref={(element) => {
                 cardRefs.current[index] = element;
               }}
-              className="flex min-h-[240px] flex-col justify-between rounded-[28px] border border-black/8 bg-white px-6 py-6 md:px-7 md:py-7"
+              className="flex min-h-[280px] flex-col rounded-[4px] border border-white/[0.07] bg-[#111111] p-8 transition duration-300 ease-in-out hover:-translate-y-1 hover:border-white/20"
             >
-              <span className="text-[11px] uppercase tracking-[0.22em] text-[#7F7F7F]">
+              <span className="text-[11px] font-normal uppercase tracking-[0.32em] text-white/30">
                 0{index + 1}
               </span>
-              <div className="mt-10">
-                <h3 className="max-w-[11ch] text-[1.75rem] font-bold uppercase leading-[0.95] tracking-[-0.03em]">
+              <div className="mt-10 flex flex-1 flex-col">
+                <h3 className="max-w-[14ch] text-[20px] font-semibold uppercase leading-[1] tracking-[-0.03em] text-white">
                   {item.title}
                 </h3>
-                <p className="mt-5 text-[14px] leading-7 text-[#5D5D5D]">
+                <p className="mt-5 max-w-[30ch] text-[14px] font-normal leading-[1.7] text-white/55">
                   {item.description}
                 </p>
               </div>

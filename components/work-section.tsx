@@ -12,7 +12,7 @@ const DESKTOP_ITEMS = [
   {
     heading: "Web Apps",
     subtitle:
-      "Sites, platforms, e-commerce builds, and digital experiences listed across Femur's public work.",
+      "Brand-led websites and web platforms including Sikhsha.in and other business-facing product surfaces.",
     href: "/work/web-apps",
     image:
       "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=800"
@@ -20,7 +20,7 @@ const DESKTOP_ITEMS = [
   {
     heading: "Mobile Apps",
     subtitle:
-      "Native and cross-platform product work gathered from Femur's portfolio and case study listings.",
+      "Mobile products like Mindspring and Sikhsha's AI-assisted school experience built for everyday use, not demos.",
     href: "/work/mobile-apps",
     image:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
@@ -28,7 +28,7 @@ const DESKTOP_ITEMS = [
   {
     heading: "CRM Systems",
     subtitle:
-      "Sales, platform, and internal operations systems surfaced from Femur's public case studies and testimonials.",
+      "Operational systems for school management, client workflows, and internal business tracking including Sikhsha and Accelify.",
     href: "/work/crm-systems",
     image:
       "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800"
@@ -36,7 +36,7 @@ const DESKTOP_ITEMS = [
   {
     heading: "Automation",
     subtitle:
-      "Automation, QA, AI operations, and workflow system projects listed on Femur's automation portfolio.",
+      "Automation systems for HR, payroll, outbound email, and internal ops where repeat work needed to disappear.",
     href: "/work/automation",
     image:
       "https://images.unsplash.com/photo-1551582045-6ec9c11d8697?w=800"
@@ -180,32 +180,32 @@ export function WorkSection() {
           <div className="corner-label corner-top-left">
             <h2>Web Apps</h2>
             <span>
-              Sites, platforms, e-commerce builds, and digital experiences
-              listed across Femur&apos;s public work.
+              Brand-led websites and web platforms including Sikhsha.in and
+              other business-facing product surfaces.
             </span>
           </div>
 
           <div className="corner-label corner-top-right">
             <h2>Mobile Apps</h2>
             <span>
-              Native and cross-platform product work gathered from
-              Femur&apos;s portfolio and case study listings.
+              Mobile products like Mindspring and Sikhsha&apos;s AI-assisted
+              school experience built for everyday use, not demos.
             </span>
           </div>
 
           <div className="corner-label corner-bottom-left">
             <h2>CRM Systems</h2>
             <span>
-              Sales, platform, and internal operations systems surfaced from
-              Femur&apos;s public case studies and testimonials.
+              Operational systems for school management, client workflows, and
+              internal business tracking including Sikhsha and Accelify.
             </span>
           </div>
 
           <div className="corner-label corner-bottom-right">
             <h2>Automation</h2>
             <span>
-              Automation, QA, AI operations, and workflow system projects
-              listed on Femur&apos;s automation portfolio.
+              Automation systems for HR, payroll, outbound email, and internal
+              ops where repeat work needed to disappear.
             </span>
           </div>
 
@@ -233,7 +233,9 @@ export function WorkSection() {
             ))}
           </div>
 
-          <div id="work-cursor" ref={cursorRef} aria-hidden="true" />
+          <div id="work-cursor" ref={cursorRef} aria-hidden="true">
+            <span>OPEN</span>
+          </div>
         </section>
       </section>
     </>
