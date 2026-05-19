@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { projectCategories } from "@/data/project-catalog";
-import { CategoryCover } from "@/components/category-cover";
 
 const DESKTOP_ITEMS = [
   {
@@ -40,6 +39,29 @@ const DESKTOP_ITEMS = [
     href: "/work/automation",
     image:
       "https://images.unsplash.com/photo-1551582045-6ec9c11d8697?w=800"
+  }
+] as const;
+
+const MOBILE_ITEMS = [
+  {
+    heading: "WEB",
+    description: "BUILD BRAND-LED SURFACES THAT MOVE PEOPLE FAST.",
+    href: "/work/web-apps"
+  },
+  {
+    heading: "MOBILE",
+    description: "SHIP PURPOSE-BUILT APPS PEOPLE ACTUALLY RETURN TO.",
+    href: "/work/mobile-apps"
+  },
+  {
+    heading: "CRM",
+    description: "TURN MESSY OPERATIONS INTO CLEAR WORKING SYSTEMS.",
+    href: "/work/crm-systems"
+  },
+  {
+    heading: "AUTOMATION",
+    description: "REMOVE REPEAT WORK BEFORE IT STARTS DRAINING TIME.",
+    href: "/work/automation"
   }
 ] as const;
 
@@ -143,31 +165,58 @@ export function WorkSection() {
   return (
     <>
       <section className="section-fade bg-white text-[#0A0A0A]">
-        <div className="flex w-full flex-col gap-0 md:hidden">
-          {projectCategories.map((category, index) => (
+        <div className="px-4 pb-8 pt-7 md:hidden">
+          <div className="mx-auto flex w-full max-w-[380px] flex-col">
+            <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.18em]">
+              <span className="h-[9px] w-[9px] bg-black" />
+              <span>Work</span>
+            </div>
+
+            <h2 className="mt-5 max-w-[11ch] text-[2.65rem] font-normal leading-[0.98] tracking-[-0.055em] text-black">
+              Instead of adapting to change, we shape it.
+            </h2>
+
             <Link
-              href={`/work/${category.slug}`}
-              key={category.slug}
-              className="group block"
+              href="/work/web-apps"
+              className="mt-7 inline-flex w-fit border border-black px-4 py-3 text-[11px] uppercase tracking-[0.16em] transition-colors hover:bg-black hover:text-white"
             >
-              <div className="relative aspect-[16/9] w-full overflow-hidden">
-                <CategoryCover category={category} />
-              </div>
-              <div className="flex items-start justify-between border-b border-[#E8E8E8] px-5 py-5">
-                <div>
-                  <div className="text-[11px] uppercase tracking-[0.2em] text-[#888888]">
-                    Category
-                  </div>
-                  <div className="mt-1 text-[1.5rem] font-normal leading-none tracking-[-0.03em]">
-                    {category.label}
-                  </div>
-                </div>
-                <span className="mt-1 text-[11px] uppercase tracking-widest text-[#888888]">
-                  ↗
-                </span>
-              </div>
+              See Our Work
             </Link>
-          ))}
+
+            <div className="mt-11 border-t border-black/12">
+              {MOBILE_ITEMS.map((item, index) => {
+                const category = projectCategories[index];
+
+                if (!category) {
+                  return null;
+                }
+
+                return (
+                  <Link
+                    href={item.href}
+                    key={item.heading}
+                    className="grid grid-cols-[78px_1fr_1.15fr] gap-3 border-b border-black/12 py-4"
+                  >
+                    <div className="relative h-[78px] w-[78px] overflow-hidden">
+                      <Image
+                        src={DESKTOP_ITEMS[index].image}
+                        alt={item.heading}
+                        fill
+                        sizes="78px"
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="pt-1 text-[11px] uppercase tracking-[0.14em] text-black">
+                      [&rarr;] {item.heading}
+                    </div>
+                    <p className="pt-1 text-[11px] uppercase leading-[1.4] tracking-[0.05em] text-black">
+                      {item.description}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         <section
