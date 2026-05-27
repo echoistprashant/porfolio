@@ -19,6 +19,8 @@ export function HeroSection({
 }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const lineRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const cursorRef = useRef<HTMLDivElement | null>(null);
+  const cursorDotRef = useRef<HTMLDivElement | null>(null);
   const [time, setTime] = useState("");
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -50,44 +52,165 @@ export function HeroSection({
       return;
     }
 
+    const section = sectionRef.current;
     const lines = lineRefs.current.filter(Boolean);
+    const cursor = cursorRef.current;
+    const cursorDot = cursorDotRef.current;
 
-    if (!lines.length) {
+    if (!section || !lines.length) {
       return;
     }
 
-    gsap.set(lines, { y: 60, opacity: 0 });
-
-    const intro = gsap.timeline();
-    intro.to(lines, {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
-      stagger: 0.08,
-      ease: "power3.out"
+    gsap.set(lines, {
+      yPercent: 110,
+      opacity: 0,
+      rotateX: -18,
+      transformOrigin: "50% 100%"
     });
 
-    if (sectionRef.current) {
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              gsap.fromTo(
-                lines,
-                { y: 24, opacity: 0.55 },
-                { y: 0, opacity: 1, duration: 0.7, stagger: 0.06, ease: "power3.out" }
-              );
-            }
-          });
-        },
-        { threshold: 0.55 }
-      );
+    const intro = gsap.timeline();
+    const pulse = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 1.25 });
+    let hasFinishedIntro = false;
 
-      observerRef.current.observe(sectionRef.current);
+    intro.to(lines, {
+      yPercent: 0,
+      opacity: 1,
+      rotateX: 0,
+      duration: 0.9,
+      stagger: 0.1,
+      ease: "power3.out"
+    });
+    intro.eventCallback("onComplete", () => {
+      hasFinishedIntro = true;
+      pulse.play(0);
+    });
+
+    pulse
+      .to(lines, {
+        yPercent: -10,
+        scale: 1.025,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power2.out"
+      })
+      .to(lines, {
+        yPercent: 0,
+        scale: 1,
+        duration: 0.95,
+        stagger: 0.1,
+        ease: "back.out(1.8)"
+      });
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || !hasFinishedIntro) {
+            return;
+          }
+
+          pulse.pause(0);
+          gsap.fromTo(
+            lines,
+            { yPercent: 16, opacity: 0.65 },
+            {
+              yPercent: 0,
+              opacity: 1,
+              duration: 0.75,
+              stagger: 0.08,
+              ease: "power3.out",
+              onComplete: () => pulse.play(0)
+            }
+          );
+        });
+      },
+      { threshold: 0.55 }
+    );
+
+    observerRef.current.observe(section);
+
+    let cleanupCursor = () => {};
+
+    if (cursor && cursorDot && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      let cursorX = window.innerWidth / 2;
+      let cursorY = window.innerHeight / 2;
+      let targetX = cursorX;
+      let targetY = cursorY;
+      let frameId = 0;
+
+      gsap.set([cursor, cursorDot], {
+        x: cursorX,
+        y: cursorY,
+        xPercent: -50,
+        yPercent: -50
+      });
+
+      const render = () => {
+        cursorX += (targetX - cursorX) * 0.16;
+        cursorY += (targetY - cursorY) * 0.16;
+
+        gsap.set(cursor, { x: cursorX, y: cursorY });
+        gsap.set(cursorDot, { x: cursorX, y: cursorY });
+
+        frameId = window.requestAnimationFrame(render);
+      };
+
+      const setInteractiveState = (interactive: boolean) => {
+        cursor.dataset.interactive = interactive ? "true" : "false";
+        cursorDot.dataset.interactive = interactive ? "true" : "false";
+      };
+
+      const handleMove = (event: MouseEvent) => {
+        targetX = event.clientX;
+        targetY = event.clientY;
+
+        const interactiveTarget =
+          event.target instanceof Element && !!event.target.closest("a, button");
+
+        setInteractiveState(interactiveTarget);
+      };
+
+      const handleEnter = (event: MouseEvent) => {
+        targetX = event.clientX;
+        targetY = event.clientY;
+        gsap.to([cursor, cursorDot], {
+          autoAlpha: 1,
+          scale: 1,
+          duration: 0.22,
+          ease: "power3.out",
+          overwrite: "auto"
+        });
+      };
+
+      const handleLeave = () => {
+        setInteractiveState(false);
+        gsap.to([cursor, cursorDot], {
+          autoAlpha: 0,
+          scale: 0.8,
+          duration: 0.2,
+          ease: "power3.out",
+          overwrite: "auto"
+        });
+      };
+
+      gsap.set([cursor, cursorDot], { autoAlpha: 0, scale: 0.8 });
+
+      frameId = window.requestAnimationFrame(render);
+      section.addEventListener("mousemove", handleMove);
+      section.addEventListener("mouseenter", handleEnter);
+      section.addEventListener("mouseleave", handleLeave);
+
+      cleanupCursor = () => {
+        window.cancelAnimationFrame(frameId);
+        section.removeEventListener("mousemove", handleMove);
+        section.removeEventListener("mouseenter", handleEnter);
+        section.removeEventListener("mouseleave", handleLeave);
+      };
     }
 
     return () => {
       intro.kill();
+      pulse.kill();
+      cleanupCursor();
       observerRef.current?.disconnect();
     };
   }, [ready]);
@@ -97,6 +220,9 @@ export function HeroSection({
       ref={sectionRef}
       className="section-fade relative flex min-h-screen flex-col overflow-hidden bg-canvas px-5 pb-8 pt-5 text-ink md:px-9 md:pb-10 md:pt-6"
     >
+      <div ref={cursorRef} className="hero-cursor" aria-hidden="true" />
+      <div ref={cursorDotRef} className="hero-cursor-dot" aria-hidden="true" />
+
       <header className="flex items-center justify-between gap-4 text-[11px] uppercase tracking-[0.15em] md:text-[13px]">
         <div className="flex items-center gap-3 self-start">
           <FsLogo />
@@ -132,7 +258,7 @@ export function HeroSection({
                 ref={(element) => {
                   lineRefs.current[index] = element;
                 }}
-                className="relative inline-block text-[clamp(5rem,12vw,10rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.03em]"
+                className="hero-line relative inline-block text-[clamp(5rem,12vw,10rem)] font-extrabold uppercase leading-[0.92] tracking-[-0.03em]"
               >
                 {line}
               </span>
