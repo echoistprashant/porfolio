@@ -7,38 +7,116 @@ import Link from "next/link";
 
 import { projectCategories } from "@/data/project-catalog";
 
+const MIN_SPLIT = 22;
+const MAX_SPLIT = 78;
+const IDLE_SPLIT = 50;
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max);
+
+type WorkArtworkConfig = {
+  eyebrow: string;
+  title: string;
+  lines: [string, string];
+  accent: string;
+  accentSoft: string;
+  ink: string;
+};
+
+function createWorkArtwork({
+  eyebrow,
+  title,
+  lines,
+  accent,
+  accentSoft,
+  ink
+}: WorkArtworkConfig) {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="${title}">
+      <defs>
+        <linearGradient id="surface" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${accentSoft}" />
+          <stop offset="100%" stop-color="#f7f2eb" />
+        </linearGradient>
+        <linearGradient id="panel" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="${ink}" stop-opacity="0.96" />
+          <stop offset="100%" stop-color="${ink}" stop-opacity="0.82" />
+        </linearGradient>
+      </defs>
+      <rect width="1200" height="1200" fill="url(#surface)" />
+      <circle cx="972" cy="236" r="208" fill="${accent}" fill-opacity="0.12" />
+      <circle cx="234" cy="1010" r="254" fill="${ink}" fill-opacity="0.06" />
+      <path d="M0 836C193 760 337 730 536 760C754 793 933 925 1200 870V1200H0Z" fill="${accent}" fill-opacity="0.18" />
+      <rect x="78" y="78" width="1044" height="1044" rx="42" fill="none" stroke="${ink}" stroke-opacity="0.12" />
+      <rect x="118" y="118" width="964" height="964" rx="34" fill="url(#panel)" />
+      <text x="176" y="214" fill="#f7f2eb" fill-opacity="0.7" font-family="Helvetica, Arial, sans-serif" font-size="34" letter-spacing="8">${eyebrow}</text>
+      <text x="176" y="462" fill="#f7f2eb" font-family="Helvetica, Arial, sans-serif" font-size="146" font-weight="700" letter-spacing="-5">${title}</text>
+      <line x1="176" y1="564" x2="1020" y2="564" stroke="${accent}" stroke-opacity="0.65" />
+      <text x="176" y="652" fill="#f7f2eb" fill-opacity="0.82" font-family="Helvetica, Arial, sans-serif" font-size="44" letter-spacing="3">${lines[0]}</text>
+      <text x="176" y="724" fill="#f7f2eb" fill-opacity="0.82" font-family="Helvetica, Arial, sans-serif" font-size="44" letter-spacing="3">${lines[1]}</text>
+      <text x="176" y="986" fill="${accent}" font-family="Helvetica, Arial, sans-serif" font-size="28" letter-spacing="10">FEMUR STUDIO</text>
+    </svg>
+  `;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
 const DESKTOP_ITEMS = [
   {
     heading: "Web Apps",
     subtitle:
       "Brand-led websites and web platforms including Sikhsha.in and other business-facing product surfaces.",
     href: "/work/web-apps",
-    image:
-      "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=800"
+    image: createWorkArtwork({
+      eyebrow: "SELECTED WEB WORK",
+      title: "Sikhsha.in",
+      lines: ["AURORA ESTATES", "BIJIN SALON"],
+      accent: "#d3a97c",
+      accentSoft: "#efe2d1",
+      ink: "#171411"
+    })
   },
   {
     heading: "Mobile Apps",
     subtitle:
       "Mobile products like Mindspring and Sikhsha's AI-assisted school experience built for everyday use, not demos.",
     href: "/work/mobile-apps",
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
+    image: createWorkArtwork({
+      eyebrow: "MOBILE PRODUCT SYSTEMS",
+      title: "Mindspring",
+      lines: ["AI TEACHING ASSISTANT", "DAILY STUDENT USE"],
+      accent: "#8aa7e8",
+      accentSoft: "#dde6fa",
+      ink: "#101625"
+    })
   },
   {
     heading: "CRM Systems",
     subtitle:
       "Operational systems for school management, client workflows, and internal business tracking including Sikhsha and Accelify.",
     href: "/work/crm-systems",
-    image:
-      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800"
+    image: createWorkArtwork({
+      eyebrow: "OPERATIONS INFRASTRUCTURE",
+      title: "Accelify",
+      lines: ["SIKHSHA SCHOOL ERP", "INCUBATOR ONLINE"],
+      accent: "#80b08b",
+      accentSoft: "#dfecdf",
+      ink: "#142017"
+    })
   },
   {
     heading: "Automation",
     subtitle:
       "Automation systems for HR, payroll, outbound email, and internal ops where repeat work needed to disappear.",
     href: "/work/automation",
-    image:
-      "https://images.unsplash.com/photo-1551582045-6ec9c11d8697?w=800"
+    image: createWorkArtwork({
+      eyebrow: "REPEAT WORK REMOVAL",
+      title: "Prane",
+      lines: ["PAYROLL AUTOMATION", "LANDMARK RETAIL BOTS"],
+      accent: "#d7a151",
+      accentSoft: "#f2e2c8",
+      ink: "#22180b"
+    })
   }
 ] as const;
 
@@ -79,6 +157,12 @@ export function WorkSection() {
     const section = desktopSectionRef.current;
     const grid = gridRef.current;
     const cursor = cursorRef.current;
+    let animationFrame = 0;
+    let currentXSplit = IDLE_SPLIT;
+    let currentYSplit = IDLE_SPLIT;
+    let targetXSplit = IDLE_SPLIT;
+    let targetYSplit = IDLE_SPLIT;
+    let isPointerInside = false;
 
     if (!section || !grid || !cursor) {
       return;
@@ -99,26 +183,56 @@ export function WorkSection() {
       });
     };
 
-    const handleMove = (event: MouseEvent) => {
-      const bounds = section.getBoundingClientRect();
+    const renderGrid = () => {
+      currentXSplit += (targetXSplit - currentXSplit) * 0.14;
+      currentYSplit += (targetYSplit - currentYSplit) * 0.14;
 
-      if (
-        event.clientX < bounds.left ||
-        event.clientX > bounds.right ||
-        event.clientY < bounds.top ||
-        event.clientY > bounds.bottom
-      ) {
+      grid.style.setProperty("--x-split", `${currentXSplit}%`);
+      grid.style.setProperty("--y-split", `${currentYSplit}%`);
+
+      const hasSettled =
+        Math.abs(targetXSplit - currentXSplit) < 0.1 &&
+        Math.abs(targetYSplit - currentYSplit) < 0.1;
+
+      if (!hasSettled || isPointerInside) {
+        animationFrame = window.requestAnimationFrame(renderGrid);
         return;
       }
 
-      const rawX = event.clientX / window.innerWidth;
-      const rawY = event.clientY / window.innerHeight;
-      const clampedX = Math.min(Math.max(rawX, 0.18), 0.82);
-      const clampedY = Math.min(Math.max(rawY, 0.18), 0.82);
+      animationFrame = 0;
+    };
 
+    const ensureAnimationFrame = () => {
+      if (!animationFrame) {
+        animationFrame = window.requestAnimationFrame(renderGrid);
+      }
+    };
+
+    const handleMove = (event: MouseEvent) => {
+      const bounds = section.getBoundingClientRect();
+
+      if (!bounds.width || !bounds.height) {
+        return;
+      }
+
+      const rawX = clamp(
+        (event.clientX - bounds.left) / bounds.width,
+        0,
+        1
+      );
+      const rawY = clamp(
+        (event.clientY - bounds.top) / bounds.height,
+        0,
+        1
+      );
+      const clampedX = clamp(rawX * 100, MIN_SPLIT, MAX_SPLIT);
+      const clampedY = clamp(rawY * 100, MIN_SPLIT, MAX_SPLIT);
+
+      isPointerInside = true;
       grid.classList.remove("idle");
-      grid.style.setProperty("--x-split", `${clampedX * 100}%`);
-      grid.style.setProperty("--y-split", `${clampedY * 100}%`);
+      targetXSplit = 100 - clampedX;
+      targetYSplit = 100 - clampedY;
+      ensureAnimationFrame();
 
       cursor.style.left = `${event.clientX}px`;
       cursor.style.top = `${event.clientY}px`;
@@ -137,26 +251,31 @@ export function WorkSection() {
       applyQuadrantState(activeIndex);
     };
 
+    const handleEnter = (event: MouseEvent) => {
+      isPointerInside = true;
+      cursor.style.opacity = "1";
+      handleMove(event);
+    };
+
     const handleLeave = () => {
+      isPointerInside = false;
       grid.classList.add("idle");
-      grid.style.setProperty("--x-split", "35%");
-      grid.style.setProperty("--y-split", "35%");
+      targetXSplit = IDLE_SPLIT;
+      targetYSplit = IDLE_SPLIT;
+      ensureAnimationFrame();
       cursor.style.opacity = "0";
       applyQuadrantState(null);
     };
 
-    const handleEnter = () => {
-      cursor.style.opacity = "1";
-    };
-
-    window.addEventListener("mousemove", handleMove);
+    section.addEventListener("mousemove", handleMove);
     section.addEventListener("mouseleave", handleLeave);
     section.addEventListener("mouseenter", handleEnter);
 
     handleLeave();
 
     return () => {
-      window.removeEventListener("mousemove", handleMove);
+      window.cancelAnimationFrame(animationFrame);
+      section.removeEventListener("mousemove", handleMove);
       section.removeEventListener("mouseleave", handleLeave);
       section.removeEventListener("mouseenter", handleEnter);
     };
@@ -263,20 +382,23 @@ export function WorkSection() {
             className="work-grid idle"
             style={
               {
-                "--x-split": "35%",
-                "--y-split": "35%"
+                "--x-split": `${IDLE_SPLIT}%`,
+                "--y-split": `${IDLE_SPLIT}%`
               } as CSSProperties
             }
           >
             {DESKTOP_ITEMS.map((item, index) => (
               <Link key={item.heading} href={item.href} className="grid-cell">
-                <img
+                <Image
                   ref={(element) => {
                     imageRefs.current[index] = element;
                   }}
                   className="grid-image"
                   src={item.image}
                   alt={item.heading}
+                  fill
+                  sizes="(min-width: 768px) 46vw, 100vw"
+                  unoptimized
                 />
               </Link>
             ))}
