@@ -14,109 +14,34 @@ const IDLE_SPLIT = 50;
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
-type WorkArtworkConfig = {
-  eyebrow: string;
-  title: string;
-  lines: [string, string];
-  accent: string;
-  accentSoft: string;
-  ink: string;
-};
-
-function createWorkArtwork({
-  eyebrow,
-  title,
-  lines,
-  accent,
-  accentSoft,
-  ink
-}: WorkArtworkConfig) {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-label="${title}">
-      <defs>
-        <linearGradient id="surface" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${accentSoft}" />
-          <stop offset="100%" stop-color="#f7f2eb" />
-        </linearGradient>
-        <linearGradient id="panel" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="${ink}" stop-opacity="0.96" />
-          <stop offset="100%" stop-color="${ink}" stop-opacity="0.82" />
-        </linearGradient>
-      </defs>
-      <rect width="1200" height="1200" fill="url(#surface)" />
-      <circle cx="972" cy="236" r="208" fill="${accent}" fill-opacity="0.12" />
-      <circle cx="234" cy="1010" r="254" fill="${ink}" fill-opacity="0.06" />
-      <path d="M0 836C193 760 337 730 536 760C754 793 933 925 1200 870V1200H0Z" fill="${accent}" fill-opacity="0.18" />
-      <rect x="78" y="78" width="1044" height="1044" rx="42" fill="none" stroke="${ink}" stroke-opacity="0.12" />
-      <rect x="118" y="118" width="964" height="964" rx="34" fill="url(#panel)" />
-      <text x="176" y="214" fill="#f7f2eb" fill-opacity="0.7" font-family="Helvetica, Arial, sans-serif" font-size="34" letter-spacing="8">${eyebrow}</text>
-      <text x="176" y="462" fill="#f7f2eb" font-family="Helvetica, Arial, sans-serif" font-size="146" font-weight="700" letter-spacing="-5">${title}</text>
-      <line x1="176" y1="564" x2="1020" y2="564" stroke="${accent}" stroke-opacity="0.65" />
-      <text x="176" y="652" fill="#f7f2eb" fill-opacity="0.82" font-family="Helvetica, Arial, sans-serif" font-size="44" letter-spacing="3">${lines[0]}</text>
-      <text x="176" y="724" fill="#f7f2eb" fill-opacity="0.82" font-family="Helvetica, Arial, sans-serif" font-size="44" letter-spacing="3">${lines[1]}</text>
-      <text x="176" y="986" fill="${accent}" font-family="Helvetica, Arial, sans-serif" font-size="28" letter-spacing="10">FEMUR STUDIO</text>
-    </svg>
-  `;
-
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-}
-
 const DESKTOP_ITEMS = [
   {
     heading: "Web Apps",
     subtitle:
       "Brand-led websites and web platforms including Sikhsha.in and other business-facing product surfaces.",
     href: "/work/web-apps",
-    image: createWorkArtwork({
-      eyebrow: "SELECTED WEB WORK",
-      title: "Sikhsha.in",
-      lines: ["AURORA ESTATES", "BIJIN SALON"],
-      accent: "#d3a97c",
-      accentSoft: "#efe2d1",
-      ink: "#171411"
-    })
+    image: "/work/sikhsha-showcase.png"
   },
   {
     heading: "Mobile Apps",
     subtitle:
       "Mobile products like Mindspring and Sikhsha's AI-assisted school experience built for everyday use, not demos.",
     href: "/work/mobile-apps",
-    image: createWorkArtwork({
-      eyebrow: "MOBILE PRODUCT SYSTEMS",
-      title: "Mindspring",
-      lines: ["AI TEACHING ASSISTANT", "DAILY STUDENT USE"],
-      accent: "#8aa7e8",
-      accentSoft: "#dde6fa",
-      ink: "#101625"
-    })
+    image: "/work/mindspring-showcase.png"
   },
   {
     heading: "CRM Systems",
     subtitle:
       "Operational systems for school management, client workflows, and internal business tracking including Sikhsha and Accelify.",
     href: "/work/crm-systems",
-    image: createWorkArtwork({
-      eyebrow: "OPERATIONS INFRASTRUCTURE",
-      title: "Accelify",
-      lines: ["SIKHSHA SCHOOL ERP", "INCUBATOR ONLINE"],
-      accent: "#80b08b",
-      accentSoft: "#dfecdf",
-      ink: "#142017"
-    })
+    image: "/work/accelify-showcase.png"
   },
   {
     heading: "Automation",
     subtitle:
       "Automation systems for HR, payroll, outbound email, and internal ops where repeat work needed to disappear.",
     href: "/work/automation",
-    image: createWorkArtwork({
-      eyebrow: "REPEAT WORK REMOVAL",
-      title: "Prane",
-      lines: ["PAYROLL AUTOMATION", "LANDMARK RETAIL BOTS"],
-      accent: "#d7a151",
-      accentSoft: "#f2e2c8",
-      ink: "#22180b"
-    })
+    image: "/work/prane-showcase.png"
   }
 ] as const;
 
@@ -398,7 +323,6 @@ export function WorkSection() {
                   alt={item.heading}
                   fill
                   sizes="(min-width: 768px) 46vw, 100vw"
-                  unoptimized
                 />
               </Link>
             ))}
