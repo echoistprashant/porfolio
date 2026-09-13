@@ -20,28 +20,28 @@ const DESKTOP_ITEMS = [
     subtitle:
       "Brand-led websites and web platforms including Sikhsha.in and other business-facing product surfaces.",
     href: "/work/web-apps",
-    image: "/work/sikhsha-showcase.png"
+    image: "/work/web-apps-showcase.png"
   },
   {
     heading: "Mobile Apps",
     subtitle:
       "Mobile products like Mindspring and Sikhsha's AI-assisted school experience built for everyday use, not demos.",
     href: "/work/mobile-apps",
-    image: "/work/mindspring-showcase.png"
+    image: "/work/mobile-apps-showcase.png"
   },
   {
     heading: "CRM Systems",
     subtitle:
       "Operational systems for school management, client workflows, and internal business tracking including Sikhsha and Accelify.",
     href: "/work/crm-systems",
-    image: "/work/accelify-showcase.png"
+    image: "/work/crm-systems-showcase.png"
   },
   {
     heading: "Automation",
     subtitle:
       "Automation systems for HR, payroll, outbound email, and internal ops where repeat work needed to disappear.",
     href: "/work/automation",
-    image: "/work/prane-showcase.png"
+    image: "/work/automation-showcase.png"
   }
 ] as const;
 
